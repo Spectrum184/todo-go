@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"todo-go/common"
 )
 
 type ItemStatus int
@@ -35,13 +36,13 @@ func (item *ItemStatus) Scan(value interface{}) error {
 	bytes, ok := value.([]byte)
 
 	if !ok {
-		return errors.New(fmt.Sprintf("Fail to scan data from sql %s", value))
+		return common.ErrDB(errors.New(fmt.Sprintf("Fail to scan data from sql %s", value)))
 	}
 
 	v, err := parseStr2ItemStatus(string(bytes))
 
 	if err != nil {
-		return errors.New(fmt.Sprintf("Fail to scan data from sql %s", value))
+		return common.ErrDB(errors.New(fmt.Sprintf("Fail to scan data from sql %s", value)))
 	}
 
 	*item = v
@@ -68,7 +69,7 @@ func (item *ItemStatus) UnmarshalJSON(data []byte) error {
 	v, err := parseStr2ItemStatus(str)
 
 	if err != nil {
-		return err
+		return common.ErrDB(err)
 	}
 
 	*item = v

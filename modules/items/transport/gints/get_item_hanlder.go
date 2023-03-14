@@ -1,7 +1,6 @@
 package gints
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
@@ -14,11 +13,9 @@ import (
 func GetItem(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
 		id, err := strconv.Atoi(c.Param("id"))
-		fmt.Println(id)
+
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
+			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 			return
 		}
 		store := storage.NewSqlStorage(db)
@@ -27,9 +24,7 @@ func GetItem(db *gorm.DB) func(*gin.Context) {
 		data, err := biz.GetItemById(c.Request.Context(), id)
 
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
+			c.JSON(http.StatusBadRequest, err)
 			return
 		}
 

@@ -2,6 +2,7 @@ package business
 
 import (
 	"context"
+	"todo-go/common"
 	"todo-go/modules/items/model"
 )
 
@@ -9,20 +10,20 @@ type GetItemStorage interface {
 	GetItem(ctx context.Context, cond map[string]interface{}) (*model.TodoItem, error)
 }
 
-type getItemBusiness struct {
+type GetItemBusiness struct {
 	store GetItemStorage
 }
 
-func NewGetItemBusiness(store GetItemStorage) *getItemBusiness {
-	return &getItemBusiness{store: store}
+func NewGetItemBusiness(store GetItemStorage) *GetItemBusiness {
+	return &GetItemBusiness{store: store}
 }
 
-func (business getItemBusiness) GetItemById(ctx context.Context, id int) (*model.TodoItem, error) {
+func (business GetItemBusiness) GetItemById(ctx context.Context, id int) (*model.TodoItem, error) {
 
 	data, err := business.store.GetItem(ctx, map[string]interface{}{"id": id})
 
 	if err != nil {
-		return nil, err
+		return nil, common.ErrCannotGetEntity(model.EntityName, err)
 	}
 
 	return data, nil

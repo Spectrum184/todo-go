@@ -15,15 +15,15 @@ type ListItemStorage interface {
 	) ([]model.TodoItem, error)
 }
 
-type listItemBusiness struct {
+type ListItemBusiness struct {
 	store ListItemStorage
 }
 
-func NewListItemBusiness(store ListItemStorage) *listItemBusiness {
-	return &listItemBusiness{store: store}
+func NewListItemBusiness(store ListItemStorage) *ListItemBusiness {
+	return &ListItemBusiness{store: store}
 }
 
-func (business listItemBusiness) ListItem(ctx context.Context,
+func (business ListItemBusiness) ListItem(ctx context.Context,
 	filter *model.Filter,
 	paging *common.Paging,
 ) ([]model.TodoItem, error) {
@@ -31,7 +31,11 @@ func (business listItemBusiness) ListItem(ctx context.Context,
 	data, err := business.store.ListItem(ctx, filter, paging)
 
 	if err != nil {
-		return nil, err
+		if err == common.RecordNotFound {
+			return nil, common.ErrCannotGetEntity(model.EntityName, err)
+		}
+
+		return nil, common.ErrCannotListEntity(model.EntityName, err)
 	}
 
 	return data, nil

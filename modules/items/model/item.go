@@ -5,6 +5,10 @@ import (
 	"todo-go/common"
 )
 
+const (
+	EntityName = "Item"
+)
+
 var (
 	ErrTitleIsBlank = errors.New("title can't be blank")
 	ErrModelDeleted = errors.New("item has been deleted")

@@ -2,10 +2,11 @@ package storage
 
 import "gorm.io/gorm"
 
-type sqlStorage struct {
+type SqlStorage struct {
 	db *gorm.DB
 }
 
-func NewSqlStorage(db *gorm.DB) *sqlStorage {
-	return &sqlStorage{db: db}
+func NewSqlStorage(db *gorm.DB) *SqlStorage {
+
+	return &SqlStorage{db: db}
 }
